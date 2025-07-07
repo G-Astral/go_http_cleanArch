@@ -2,12 +2,13 @@ package services
 
 import (
 	"go-http-cleanArch/internal/entities"
-	"strings"
+	// "strings"
 )
 
 type repo interface {
 	AddUser(user *entities.User) (err error)
 	GetAllUsers() (users *[]entities.User, err error)
+	GetUserByID(id int) (user *entities.User, err error)
 }
 
 type service struct {
@@ -21,8 +22,8 @@ func InitService(repo repo) service {
 }
 
 func (s *service) AddUser(user *entities.User) (err error) {
-	//БИЗНЕС ЛОГИКА
-	user.Name = strings.ToUpper(user.Name)
+	// БИЗНЕС ЛОГИКА
+	// user.Name = strings.ToUpper(user.Name)
 
 	err = s.repo.AddUser(user)
 
@@ -33,9 +34,14 @@ func (s *service) GetAllUsers() (users *[]entities.User, err error) {
 	users, err = s.repo.GetAllUsers()
 
 	// КАКАЯ-ТО БИЗНЕС ЛОГИКА
-	for _, v := range *users {
-		v.Name = strings.ToLower(v.Name)
-	}
 
 	return users, err
+}
+
+func (s *service) GetUserByID(id int) (user *entities.User, err error) {
+	user, err = s.repo.GetUserByID(id)
+
+	// КАКАЯ-ТО БИЗНЕС ЛОГИКА
+
+	return user, err
 }

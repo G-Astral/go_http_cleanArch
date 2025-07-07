@@ -48,3 +48,15 @@ func (r *repo) GetAllUsers() (users *[]entities.User, err error) {
 
 	return users, nil
 }
+
+func (r *repo) GetUserByID(id int) (user *entities.User, err error) {
+	user = &entities.User{}
+	query := "SELECT * FROM users WHERE id = $1"
+
+	err = r.db.QueryRow(query, id).Scan(&user.Id, &user.Name, &user.Age)
+	if err != nil {
+		return nil, err
+	}
+
+	return user, err
+}
