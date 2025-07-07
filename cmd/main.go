@@ -30,6 +30,7 @@ func main() {
 	r.GET("/allusers", hand.GetAllUsers)
 	r.GET("/user/:id", hand.GetUserByID)
 	r.DELETE("/user/:id", hand.DelUserById)
+	r.PUT("/user/:id", hand.UpdUserById)
 
 	r.Run()
 }

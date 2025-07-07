@@ -14,6 +14,7 @@ type service interface {
 	GetAllUsers() (users *[]entities.User, err error)
 	GetUserByID(id int) (user *entities.User, err error)
 	DelUserById(id int) (rowsAffected int64, err error)
+	UpdUserById(user *entities.User, id int) (err error)
 }
 
 type handler struct {
@@ -96,4 +97,32 @@ func (h *handler) DelUserById(c *gin.Context) {
 	} else {
 		c.JSON(404, gin.H{"error": "Пользователь не найден"})
 	}
+}
+
+func (h *handler) UpdUserById(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "Неверный ID (не число)"})
+		return
+	}
+
+	user := entities.User{}
+
+	err = c.BindJSON(&user)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "Неверный JSON"})
+		return
+	}
+
+	err = h.ser.UpdUserById(&user, id)
+	if err == sql.ErrNoRows {
+		c.JSON(404, gin.H{"error": "Пользователь не найден"})
+		return
+	} else if err != nil {
+		c.JSON(500, gin.H{"error": "Internal server error"})
+		return
+	}
+
+	c.JSON(200, &user)
 }

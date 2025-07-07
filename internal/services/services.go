@@ -10,6 +10,7 @@ type repo interface {
 	GetAllUsers() (users *[]entities.User, err error)
 	GetUserByID(id int) (user *entities.User, err error)
 	DelUserById(id int) (rowsAffected int64, err error)
+	UpdUserById(user *entities.User, id int) (err error)
 }
 
 type service struct {
@@ -51,4 +52,10 @@ func (s *service) DelUserById(id int) (rowsAffected int64, err error) {
 	rowsAffected, err = s.repo.DelUserById(id)
 
 	return rowsAffected, err
+}
+
+func (s *service) UpdUserById(user *entities.User, id int) (err error) {
+	err = s.repo.UpdUserById(user, id)
+
+	return err
 }
