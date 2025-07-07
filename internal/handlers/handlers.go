@@ -8,8 +8,8 @@ import (
 )
 
 type service interface {
-	// AddUser(user *entities.User) (id int, err error)
 	AddUser(user *entities.User) (err error)
+	GetAllUsers() (users *[]entities.User, err error)
 }
 
 type handler struct {
@@ -24,12 +24,6 @@ func InitHandler(ser service) handler {
 
 func (h *handler) AddUser(c *gin.Context) {
 	user := entities.User{}
-
-	// id, err := h.ser.AddUser(&user)
-	// if err != nil {
-	// 	return
-	// }
-	// //Запись id в запрос
 
 	err := c.BindJSON(&user)
 	if err != nil {
@@ -47,4 +41,14 @@ func (h *handler) AddUser(c *gin.Context) {
 		"message": fmt.Sprintf("Имя: %s. Возраст: %d. ID: %d", user.Name, user.Age, user.Id),
 	})
 
+}
+
+func (h *handler) GetAllUsers(c *gin.Context) {
+	users, err := h.ser.GetAllUsers()
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Internal server error"})
+		return
+	}
+
+	c.IndentedJSON(200, users)
 }

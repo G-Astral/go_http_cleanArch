@@ -27,6 +27,7 @@ func main() {
 	r := gin.Default()
 
 	r.POST("/adduser", hand.AddUser)
+	r.GET("/allusers", hand.GetAllUsers)
 
 	r.Run()
 }
