@@ -13,6 +13,7 @@ type service interface {
 	AddUser(user *entities.User) (err error)
 	GetAllUsers() (users *[]entities.User, err error)
 	GetUserByID(id int) (user *entities.User, err error)
+	DelUserById(id int) (rowsAffected int64, err error)
 }
 
 type handler struct {
@@ -74,4 +75,25 @@ func (h *handler) GetUserByID(c *gin.Context) {
 	}
 
 	c.JSON(200, user)
+}
+
+func (h *handler) DelUserById(c *gin.Context) {
+	idStr := c.Param("id")
+	id, err := strconv.Atoi(idStr)
+	if err != nil {
+		c.JSON(400, gin.H{"error": "Неверный ID (не число)"})
+		return
+	}
+
+	rowsAffected, err := h.ser.DelUserById(id)
+	if err != nil {
+		c.JSON(500, gin.H{"error": "Internal server error"})
+		return
+	}
+
+	if rowsAffected > 0 {
+		c.JSON(200, gin.H{"message": "Пользователь удален"})
+	} else {
+		c.JSON(404, gin.H{"error": "Пользователь не найден"})
+	}
 }

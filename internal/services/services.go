@@ -9,6 +9,7 @@ type repo interface {
 	AddUser(user *entities.User) (err error)
 	GetAllUsers() (users *[]entities.User, err error)
 	GetUserByID(id int) (user *entities.User, err error)
+	DelUserById(id int) (rowsAffected int64, err error)
 }
 
 type service struct {
@@ -44,4 +45,10 @@ func (s *service) GetUserByID(id int) (user *entities.User, err error) {
 	// КАКАЯ-ТО БИЗНЕС ЛОГИКА
 
 	return user, err
+}
+
+func (s *service) DelUserById(id int) (rowsAffected int64, err error) {
+	rowsAffected, err = s.repo.DelUserById(id)
+
+	return rowsAffected, err
 }

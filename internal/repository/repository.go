@@ -60,3 +60,18 @@ func (r *repo) GetUserByID(id int) (user *entities.User, err error) {
 
 	return user, err
 }
+
+func (r *repo) DelUserById(id int) (rowsAffected int64, err error) {
+	query := "DELETE FROM users WHERE id = $1"
+	res, err := r.db.Exec(query, id)
+	if err != nil {
+		return rowsAffected, err
+	}
+
+	rowsAffected, err = res.RowsAffected()
+	if err != nil {
+		return rowsAffected, err
+	}
+
+	return rowsAffected, nil
+}

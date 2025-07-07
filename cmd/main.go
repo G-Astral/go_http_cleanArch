@@ -29,6 +29,7 @@ func main() {
 	r.POST("/adduser", hand.AddUser)
 	r.GET("/allusers", hand.GetAllUsers)
 	r.GET("/user/:id", hand.GetUserByID)
+	r.DELETE("/user/:id", hand.DelUserById)
 
 	r.Run()
 }
