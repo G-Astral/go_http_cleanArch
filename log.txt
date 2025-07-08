@@ -1,0 +1,31 @@
+2025/07/08 22:47:38 |200| [INFO]	 |e8bbd62b-1ccd-4883-aa26-8762a5590dd2| GET    | /allusers  | Запрошены все пользователи
+2025/07/08 22:47:53 |200| [INFO]	 |454f58b6-3a5f-4d28-9ba6-0843ce835f0d| GET    | /allusers  | Запрошены все пользователи
+2025/07/08 22:48:10 |404| [WARN]	 |37f2acb9-335d-4c49-909b-4f9cded76382| GET    | /all       | 
+2025/07/08 22:48:56 |200| [INFO]	 |4fff7f1e-8dc1-4c24-8e47-5a7b661debd1| GET    | /user/1    | Запрошен пользователь с ID: 1
+2025/07/08 22:49:10 |200| [INFO]	 |0a164d92-ad3a-4bae-90dd-f09012deced2| GET    | /user/1    | Запрошен пользователь с ID: 1
+
+2025/07/08 22:54:18 |200| [INFO]	 |328ae1e2-ce35-4f30-8626-de89760f3ad2| GET    | /allusers  | Запрошены все пользователи
+2025/07/08 22:54:22 |200| [INFO]	 |fe311670-7a16-43bd-975e-06ae28552e7b| GET    | /user/1    | Запрошен пользователь с ID: 1
+2025/07/08 22:54:30 |404| [WARN]	 |beb5c041-6c00-4c68-9da9-ad1c9dace8cf| GET    | /user/10   | sql: no rows in result set
+2025/07/08 22:54:37 |400| [WARN]	 |cb0721d7-0404-4882-a3b9-b9ea1aeac2ce| GET    | /user/r    | strconv.Atoi: parsing "r": invalid syntax
+2025/07/08 22:56:06 |200| [INFO]	 |3eabcf72-d9b3-446d-b2b2-8e4851781a9e| POST   | /adduser   | Добавлен новый пользователь. Имя: Test. Возраст: 999. ID: 22
+2025/07/08 22:56:26 |404| [WARN]	 |18a24617-66e8-472b-b31e-b248207572ef| POST   | /aduser    | 
+2025/07/08 22:56:34 |404| [WARN]	 |63e49b74-3ffb-4d50-8b9b-1098734b5a06| POST   | /aduser    | 
+2025/07/08 22:56:41 |400| [WARN]	 |136420f7-9dbb-4088-b1e8-997b8fc0658f| POST   | /adduser   | invalid character '}' looking for beginning of value
+2025/07/08 22:57:06 |400| [WARN]	 |7b6a5653-7e97-4d22-9e41-d65f6fdd4b86| POST   | /adduser   | invalid character ',' looking for beginning of value
+2025/07/08 22:57:30 |404| [WARN]	 |efadbad3-de17-42a0-af02-6cb0033aba7e| PUT    | /user/21   | sql: no rows in result set
+2025/07/08 22:57:56 |500| [ERROR]	 |50ad0fc6-98ae-4818-a20c-1d2a30ff856f| PUT    | /user/21   | dial tcp [::1]:5432: connect: connection refused
+2025/07/08 22:58:08 |404| [WARN]	 |cab02898-1873-4938-914e-d30eef0ce8c7| PUT    | /user/21   | sql: no rows in result set
+2025/07/08 22:58:24 |400| [WARN]	 |8058252a-d57d-4367-8847-d837b2055b2b| PUT    | /user/e    | strconv.Atoi: parsing "e": invalid syntax
+2025/07/08 22:58:36 |400| [WARN]	 |a15dc6c4-1bb6-4065-8705-684516ae7951| PUT    | /user/22   | invalid character '}' looking for beginning of value
+2025/07/08 22:58:48 |400| [WARN]	 |d5cda888-bb63-4ac6-9573-e0d3f3d52bc6| PUT    | /user/22   | invalid character ',' looking for beginning of value
+2025/07/08 22:58:57 |200| [INFO]	 |74009dc2-20e1-47b8-aacf-b662d1cb600e| PUT    | /user/22   | Изменен пользователь с ID: 22
+2025/07/08 22:59:41 |200| [INFO]	 |0aedae86-504d-4a48-8222-320543ccc14e| PUT    | /user/22   | Изменен пользователь с ID: 22
+2025/07/08 23:00:21 |404| [WARN]	 |4b08472b-9567-450e-8b0a-263dc746bc76| DELETE | /user/21   | <nil>
+2025/07/08 23:01:15 |404| [WARN]	 |e11bfc32-6a13-4578-9800-fbad4371de68| DELETE | /user/21   | Пользователь не найден
+2025/07/08 23:01:30 |400| [WARN]	 |919e60e4-cbc1-4f12-9f14-4c5ba5708911| DELETE | /user/е    | strconv.Atoi: parsing "е": invalid syntax
+2025/07/08 23:01:36 |200| [INFO]	 |e1bf5b56-1908-430d-89d9-99820fba95cd| DELETE | /user/22   | Удален пользователь с ID: 22
+2025/07/08 23:01:53 |404| [WARN]	 |132428a9-eb14-4883-ae26-dddfcb8631fe| DELETE | /user/22   | Пользователь не найден
+2025/07/08 23:02:17 |200| [INFO]	 |1ab2a0f6-28f2-4aed-8ebd-88b918d61b76| GET    | /allusers  | Запрошены все пользователи
+2025/07/08 23:02:25 |500| [ERROR]	 |11f1c212-3064-46a9-8fa5-10a1d440b70e| GET    | /allusers  | dial tcp [::1]:5432: connect: connection refused
+2025/07/08 23:02:38 |200| [INFO]	 |1dcf730a-addb-4bea-928f-1483834ad133| GET    | /allusers  | Запрошены все пользователи
