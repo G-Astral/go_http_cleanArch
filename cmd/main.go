@@ -3,6 +3,7 @@ package main
 import (
 	"database/sql"
 	"go-http-cleanArch/internal/handlers"
+	"go-http-cleanArch/internal/middlewares"
 	"go-http-cleanArch/internal/repository"
 	"go-http-cleanArch/internal/services"
 	"log"
@@ -25,6 +26,8 @@ func main() {
 	hand := handlers.InitHandler(&serv)
 
 	r := gin.Default()
+
+	r.Use(middlewares.RequestIDMiddleware())
 
 	r.POST("/adduser", hand.AddUser)
 	r.GET("/allusers", hand.GetAllUsers)
