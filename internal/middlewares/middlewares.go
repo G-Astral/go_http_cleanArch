@@ -3,17 +3,18 @@ package middlewares
 import (
 	"context"
 	"fmt"
-	"log"
 
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
+	"go.uber.org/zap"
 )
 
 type ctxKey string
 
 const requestIDKey ctxKey = "requestID"
 
-func RequestIDMiddleware() gin.HandlerFunc {
+// Injects X-Request-ID into context and headers
+func RequestIDContexMiddleware() gin.HandlerFunc {
 	return func(c *gin.Context) {
 		reqID := uuid.New().String()
 
@@ -26,11 +27,10 @@ func RequestIDMiddleware() gin.HandlerFunc {
 	}
 }
 
-func LoggerMiddlware() gin.HandlerFunc {
+func LoggerMiddlware(logger *zap.Logger) gin.HandlerFunc {
 	return func(c *gin.Context) {
 		c.Next()
 
-		var level string
 		var message string
 
 		status := c.Writer.Status()
@@ -49,17 +49,21 @@ func LoggerMiddlware() gin.HandlerFunc {
 			}
 		}
 
-		switch status {
-		case 200:
-			level = "INFO"
-		case 400, 404:
-			level = "WARN"
-		case 500:
-			level = "ERROR"
-		default:
-			level = "INFO"
+		fields := []zap.Field{
+			zap.Int("status", status),
+			zap.Any("requestID", id),
+			zap.String("method", method),
+			zap.String("path", path),
+			zap.String("message", message),
 		}
 
-		log.Printf("|%-3d| [%s]\t |%-36s| %-6s | %-10s | %s", status, level, id, method, path, message)
+		switch {
+		case status >= 500:
+			logger.Error("server error", fields...)
+		case status >= 400:
+			logger.Warn("client error", fields...)
+		default:
+			logger.Info("successfullR", fields...)
+		}
 	}
 }

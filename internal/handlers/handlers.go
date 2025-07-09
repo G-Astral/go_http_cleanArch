@@ -32,83 +32,83 @@ func (h *handler) AddUser(c *gin.Context) {
 
 	err := c.BindJSON(&user)
 	if err != nil {
+		c.Set("logMessage", "Ошибка при добавлении пользователя: неверный запрос")
 		c.JSON(400, gin.H{"error": "Неверный JSON"})
-		c.Set("logMessage", err)
 		return
 	}
 
 	err = h.ser.AddUser(&user)
 	if err != nil {
+		c.Set("logMessage", "Ошибка при добавлении пользователя")
 		c.JSON(500, gin.H{"error": "Bad request"})
-		c.Set("logMessage", err)
 		return
 	}
 
+	c.Set("logMessage", fmt.Sprintf("Добавлен новый пользователь. Имя: %s. Возраст: %d. ID: %d", user.Name, user.Age, user.Id))
 	c.JSON(200, gin.H{
 		"message": fmt.Sprintf("Имя: %s. Возраст: %d. ID: %d", user.Name, user.Age, user.Id),
 	})
-	c.Set("logMessage", fmt.Sprintf("Добавлен новый пользователь. Имя: %s. Возраст: %d. ID: %d", user.Name, user.Age, user.Id))
 
 }
 
 func (h *handler) GetAllUsers(c *gin.Context) {
 	users, err := h.ser.GetAllUsers()
 	if err != nil {
+		c.Set("logMessage", "Ошибка сервера при получении всех пользователей")
 		c.JSON(500, gin.H{"error": "Internal server error"})
-		c.Set("logMessage", err)
 		return
 	}
 
-	c.IndentedJSON(200, users)
 	c.Set("logMessage", "Запрошены все пользователи")
+	c.IndentedJSON(200, users)
 }
 
 func (h *handler) GetUserByID(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
+		c.Set("logMessage", "Неверный ID (не число)")
 		c.JSON(400, gin.H{"error": "Неверный ID (не число)"})
-		c.Set("logMessage", err)
 		return
 	}
 
 	user, err := h.ser.GetUserByID(id)
 	if err == sql.ErrNoRows {
+		c.Set("logMessage", "Пользователь не найден")
 		c.JSON(404, gin.H{"error": "Пользователь не найден"})
-		c.Set("logMessage", err)
 		return
 	} else if err != nil {
-		c.JSON(500, gin.H{"error": "Internal server error"})
-		c.Set("logMessage", err)
+		c.Set("logMessage", "Ошибка сервера при получении пользователя")
+		c.JSON(500, gin.H{"error": "Ошибка сервера при получении пользователя"})
 		return
 	}
 
-	c.JSON(200, user)
 	c.Set("logMessage", fmt.Sprintf("Запрошен пользователь с ID: %d", id))
+	c.JSON(200, user)
 }
 
 func (h *handler) DelUserById(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
+		c.Set("logMessage", "Неверный ID (не число)")
 		c.JSON(400, gin.H{"error": "Неверный ID (не число)"})
-		c.Set("logMessage", err)
 		return
 	}
 
 	rowsAffected, err := h.ser.DelUserById(id)
 	if err != nil {
-		c.JSON(500, gin.H{"error": "Internal server error"})
-		c.Set("logMessage", err)
+		c.Set("logMessage", "Ошибка сервера при удалении пользователя")
+		c.JSON(500, gin.H{"error": "Ошибка сервера при удалении пользователя"})
 		return
 	}
 
 	if rowsAffected > 0 {
-		c.JSON(200, gin.H{"message": "Пользователь удален"})
 		c.Set("logMessage", fmt.Sprintf("Удален пользователь с ID: %d", id))
+		c.JSON(200, gin.H{"message": "Пользователь удален"})
 	} else {
-		c.JSON(404, gin.H{"error": "Пользователь не найден"})
 		c.Set("logMessage", "Пользователь не найден")
+		c.JSON(404, gin.H{"error": "Пользователь не найден"})
 	}
 }
 
@@ -116,8 +116,8 @@ func (h *handler) UpdUserById(c *gin.Context) {
 	idStr := c.Param("id")
 	id, err := strconv.Atoi(idStr)
 	if err != nil {
+		c.Set("logMessage", "Неверный ID (не число)")
 		c.JSON(400, gin.H{"error": "Неверный ID (не число)"})
-		c.Set("logMessage", err)
 		return
 	}
 
@@ -125,22 +125,22 @@ func (h *handler) UpdUserById(c *gin.Context) {
 
 	err = c.BindJSON(&user)
 	if err != nil {
+		c.Set("logMessage", "Ошибка при изменении пользователя: неверный запрос")
 		c.JSON(400, gin.H{"error": "Неверный JSON"})
-		c.Set("logMessage", err)
 		return
 	}
 
 	err = h.ser.UpdUserById(&user, id)
 	if err == sql.ErrNoRows {
+		c.Set("logMessage", "Пользователь не найден")
 		c.JSON(404, gin.H{"error": "Пользователь не найден"})
-		c.Set("logMessage", err)
 		return
 	} else if err != nil {
-		c.JSON(500, gin.H{"error": "Internal server error"})
-		c.Set("logMessage", err)
+		c.Set("logMessage", "Ошибка сервера при изменении пользователя")
+		c.JSON(500, gin.H{"error": "Ошибка сервера при изменении пользователя"})
 		return
 	}
 
-	c.JSON(200, &user)
 	c.Set("logMessage", fmt.Sprintf("Изменен пользователь с ID: %d", id))
+	c.JSON(200, &user)
 }

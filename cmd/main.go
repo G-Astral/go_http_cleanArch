@@ -3,11 +3,13 @@ package main
 import (
 	"database/sql"
 	"go-http-cleanArch/internal/handlers"
+	"go-http-cleanArch/internal/logger"
 	"go-http-cleanArch/internal/middlewares"
 	"go-http-cleanArch/internal/repository"
 	"go-http-cleanArch/internal/services"
 	"log"
-	"os"
+
+	// "os"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
@@ -21,11 +23,14 @@ func main() {
 		return
 	}
 
-	logFile, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
-	if err != nil {
-		log.Fatal(err)
-	}
-	log.SetOutput(logFile)
+	// logFile, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	// if err != nil {
+	// 	log.Fatal(err)
+	// }
+	// log.SetOutput(logFile)
+
+	logger.InitLogger()
+	defer logger.Logger.Sync()
 
 	repo := repository.InitRepo(db)
 
@@ -34,8 +39,8 @@ func main() {
 
 	r := gin.Default()
 
-	r.Use(middlewares.RequestIDMiddleware())
-	r.Use(middlewares.LoggerMiddlware())
+	r.Use(middlewares.RequestIDContexMiddleware())
+	r.Use(middlewares.LoggerMiddlware(logger.Logger))
 
 	r.POST("/adduser", hand.AddUser)
 	r.GET("/allusers", hand.GetAllUsers)
