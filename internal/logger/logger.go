@@ -13,7 +13,6 @@ func InitLogger() {
 	level := zapcore.DebugLevel
 
 	encoderCfg := zap.NewDevelopmentEncoderConfig()
-	// encoderCfg.EncodeLevel = zapcore.CapitalColorLevelEncoder
 	encoder := zapcore.NewConsoleEncoder(encoderCfg)
 
 	logFile, err := os.OpenFile("app.log", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0o644)

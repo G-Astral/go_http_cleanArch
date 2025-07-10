@@ -8,26 +8,37 @@ import (
 	"go-http-cleanArch/internal/repository"
 	"go-http-cleanArch/internal/services"
 	"log"
+	"os"
 
-	// "os"
+	// "fmt"
 
 	"github.com/gin-gonic/gin"
 	_ "github.com/lib/pq"
 )
 
 func main() {
-	connStr := "postgres://localhost/go_http_gin_db?sslmode=disable"
+	var connStr string
+	host := os.Getenv("DB_HOST")
+	if host == "" {
+		connStr = "postgres://localhost/go_http_gin_db?sslmode=disable"
+	} else {
+		connStr = "postgres://postgres@db:5432/go_http_gin_db?sslmode=disable"
+	}
+
+	// fmt.Println("connStr =", connStr)
 	db, err := sql.Open("postgres", connStr)
 	if err != nil {
 		log.Fatal(err)
 		return
 	}
 
-	// logFile, err := os.OpenFile("log.txt", os.O_APPEND|os.O_CREATE|os.O_WRONLY, 0644)
+	// row := db.QueryRow("SELECT current_user")
+	// var ut string
+	// err = row.Scan(&ut)
 	// if err != nil {
 	// 	log.Fatal(err)
 	// }
-	// log.SetOutput(logFile)
+	// fmt.Println("Текущий пользователь в PostgreSQL:", ut)
 
 	logger.InitLogger()
 	defer logger.Logger.Sync()

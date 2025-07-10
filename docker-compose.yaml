@@ -1,0 +1,27 @@
+services:
+  crud:
+    image: crud
+    build:
+      context: .
+    environment:
+      DB_HOST: db
+    depends_on:
+      - db
+    ports:
+      - "5555:8080"
+  db:
+    image: postgres:17
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_HOST_AUTH_METHOD: trust
+      POSTGRES_DB: go_http_gin_db
+    healthcheck:
+      test: ["CMD", "pg_isready -U postgres -d go_http_gin_db"]
+      interval: 10s
+      timeout: 5s
+      retries: 5
+    volumes:
+      - ./init.sql:/docker-entrypoint-initdb.d/init.sql
+
+volumes:
+  db-data:
